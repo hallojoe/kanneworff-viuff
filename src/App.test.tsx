@@ -26,3 +26,23 @@ describe('Pages and shared project state', () => {
   });
   it('shows a readable recovery notice instead of crashing on broken local JSON', async () => { localStorage.setItem(STORAGE_KEY, 'bad json'); render(<App/>); expect(await screen.findByText(/Det gemte projekt kunne ikke læses/)).toBeTruthy(); expect(screen.getByDisplayValue(initialProject().name)).toBeTruthy(); });
 });
+
+describe('First-visit affiliation notice', () => {
+  it('explains the hobby project and remembers dismissal across visits', () => {
+    const firstVisit = render(<App/>);
+    expect(screen.getByRole('heading', { name: 'Uafhængigt hobbyprojekt' })).toBeTruthy();
+    expect(screen.getByText(/ikke affilieret med Kanneworff & Viuff/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Forstået' }));
+    expect(screen.queryByRole('heading', { name: 'Uafhængigt hobbyprojekt' })).toBeNull();
+    firstVisit.unmount();
+    render(<App/>);
+    expect(screen.queryByRole('heading', { name: 'Uafhængigt hobbyprojekt' })).toBeNull();
+  });
+  it('can be dismissed even when browser storage is blocked', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('Blocked'); });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Blocked'); });
+    render(<App/>);
+    fireEvent.click(screen.getByRole('button', { name: 'Forstået' }));
+    expect(screen.queryByRole('heading', { name: 'Uafhængigt hobbyprojekt' })).toBeNull();
+  });
+});
