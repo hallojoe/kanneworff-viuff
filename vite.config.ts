@@ -5,5 +5,5 @@ export default defineConfig({
   plugins: [react()],
   base: '/kanneworff-viuff/',
   build: { rollupOptions: { output: { manualChunks: { three: ['three'] } } } },
-  test: { environment: 'jsdom', restoreMocks: true },
+  test: { include: ['src/**/*.test.{ts,tsx}'], environment: 'jsdom', restoreMocks: true },
 });

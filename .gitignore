@@ -5,3 +5,5 @@ coverage/
 .vitest/
 *.local
 .tmp/
+test-results/
+playwright-report/

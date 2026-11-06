@@ -39,7 +39,8 @@ Vite anvender base `/kanneworff-viuff/`. Udviklingsserveren åbnes derfor på `h
 1. `npm ci` installerer låste afhængigheder.
 2. Vitest kontrollerer beregninger, validering og centrale brugerhandlinger.
 3. TypeScript kontrollerer typer, og Vite producerer `dist/`.
-4. Ved `main` uploades Pages-artifactet, og et separat job publicerer det.
+4. Playwright tester alle fem sider i Chromium med software-WebGL på desktop og mobil. Skærmbilleder gemmes som Actions-artifactet `browser-checks`.
+5. Ved `main` uploades Pages-artifactet, og et separat job publicerer det.
 
 Pull requests tester og bygger, men publicerer ikke. Repositoryets **Settings → Pages → Source** skal være **GitHub Actions**. Deployment-jobbet har kun `pages: write` og `id-token: write`; build har `contents: read`. Der kræves ingen egne secrets. Ved et nyt repository kan Pages skulle aktiveres efter første commit. Se Actions-loggen, hvis Configure Pages fejler med 404.
 
@@ -73,3 +74,5 @@ Alle standardpriser og CO₂-faktorer er **illustrative, redigerbare scenarieant
 - `src/**/*.test.*`: beregnings-, import- og UI-tests.
 
 Værktøjerne er inspireret af virksomhedens offentligt beskrevne arbejde med hoved- og totalentreprise, tidlig projektinddragelse, jord/beton/kloak og aflevering: https://kanneworffviuff.dk/.
+
+Browserkontroller kan køres lokalt efter `npm run build` med `npx playwright install chromium` og `npx playwright test`. De kontrollerer WebGL, kameraknapper, layoutbredde, tema, lagring og JavaScript-fejl.
